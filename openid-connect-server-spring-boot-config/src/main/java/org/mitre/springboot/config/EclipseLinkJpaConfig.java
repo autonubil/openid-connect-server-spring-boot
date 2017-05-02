@@ -4,7 +4,9 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 import javax.persistence.EntityManagerFactory;
+import javax.sql.DataSource;
 
+import org.springframework.beans.factory.ObjectProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.AutoConfigureAfter;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
@@ -22,6 +24,7 @@ import org.springframework.orm.jpa.vendor.AbstractJpaVendorAdapter;
 import org.springframework.orm.jpa.vendor.EclipseLinkJpaVendorAdapter;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.transaction.jta.JtaTransactionManager;
 
 @Configuration
 @EnableTransactionManagement
@@ -29,8 +32,15 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @AutoConfigureAfter(DataSourceAutoConfiguration.class)
 public class EclipseLinkJpaConfig extends JpaBaseConfiguration {
 
+
 	@Autowired
 	private JpaProperties properties;
+	
+	
+	public EclipseLinkJpaConfig(DataSource dataSource, JpaProperties properties, ObjectProvider<JtaTransactionManager> jtaTransactionManagerProvider) {
+		super(dataSource, properties, jtaTransactionManagerProvider);
+		// TODO Auto-generated constructor stub
+	}
 
 	@Override
 	protected AbstractJpaVendorAdapter createJpaVendorAdapter() {
